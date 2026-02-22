@@ -1,0 +1,15 @@
+{
+  "name": "hono-basics",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --hot --env-file=.env src/index.ts"
+  },
+  "dependencies": {
+    "hono": "^4.12.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "oxfmt": "^0.34.0",
+    "oxlint": "^1.49.0"
+  }
+}
