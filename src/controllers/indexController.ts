@@ -1,8 +1,7 @@
-import type { User } from '../types.js';
-import type { Context } from 'hono';
-import { html } from 'hono/html';
+import type { Context } from "hono";
+import { html } from "hono/html";
 
-import { getUsers, addUser, deleteUser } from '../config/queries.js';
+import { getUsers, addUser, deleteUser } from "../config/queries.js";
 
 export function indexController(c: Context) {
   return c.html(
@@ -25,26 +24,7 @@ export function aboutController(c: Context) {
 
 export async function usersController(c: Context) {
   const data = await getUsers();
-  console.log(data);
-  const users = data
-    .map(
-      (user: User) =>
-        html`<div>
-        <p><strong>Full name:</strong> ${user.name} ${user.surname || 'N/A'}</p>
-        <p><strong>Age:</strong> ${user.age}</p>
-        <form action="/${user.id}/delete" method="POST">
-          <button type="submit">Delete</button>
-        </form>
-      </div>`,
-    )
-    .join('');
-
-  return c.html(`
-    <h1>Users</h1> 
-    ${users}
-    
-    <a href="/add">Add user</a>
-    `);
+  return c.json({ data });
 }
 
 export function getAddFormController(c: Context) {
@@ -67,11 +47,11 @@ export function getAddFormController(c: Context) {
 export async function postAddFormController(c: Context) {
   const { name, surname, age } = await c.req.parseBody();
   await addUser(String(name), String(surname), Number(age));
-  return c.redirect('/users');
+  return c.redirect("/users");
 }
 
 export async function deleteUserController(c: Context) {
-  const userID = c.req.param('id');
+  const userID = c.req.param("id");
   await deleteUser(userID);
-  return c.redirect('/users');
+  return c.redirect("/users");
 }
