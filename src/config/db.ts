@@ -1,3 +1,3 @@
-import { SQL } from 'bun';
+import { SQL } from "bun";
 
-export const pg = new SQL(Bun.env.DB_URL!);
+export const pg = new SQL(Bun.env.DATABASE_URL!);
