@@ -1,3 +1,5 @@
-import { SQL } from 'bun';
+import { Pool } from 'pg';
 
-export const pg = new SQL(Bun.env.DB_URL!);
+export const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
