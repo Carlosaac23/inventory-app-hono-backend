@@ -5,7 +5,7 @@ import {
   addCarController,
   editCarController,
   deleteCarController,
-} from '../controllers/index.ts';
+} from '../controllers/index.js';
 export const routes = new Hono();
 
 routes.get('/cars', getAllCarsController);

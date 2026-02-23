@@ -1,6 +1,6 @@
-import type { Car } from '../types/index.ts';
+import type { Car } from '../types/index.js';
 
-import { pool } from './db.ts';
+import { pool } from './db.js';
 
 export async function getAllCars() {
   const { rows } = await pool.query('SELECT * FROM cars');
