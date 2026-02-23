@@ -5,7 +5,14 @@ import { routes } from './routes/index.js';
 
 const app = new Hono();
 
-app.use('*', cors());
+app.use(
+  '*',
+  cors({
+    origin: [process.env.FRONTEND_URL!],
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowHeaders: ['Content-Type'],
+  }),
+);
 app.route('/', routes);
 
 export default app;
