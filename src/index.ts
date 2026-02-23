@@ -1,18 +1,20 @@
-import { Hono } from "hono";
-import { cors } from "hono/cors";
+import { serve } from '@hono/node-server';
+import { Hono } from 'hono';
+import { cors } from 'hono/cors';
 
-import { routes } from "./routes/index.js";
+import { routes } from './routes/index.ts';
 
 const app = new Hono();
 
-app.use(
-  "*",
-  cors({
-    origin: process.env.FRONTEND_URL || "https://inventory-app-hono-frontend.vercel.app",
-    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowHeaders: ["Content-Type"],
-  }),
-);
-app.route("/", routes);
+app.use('*', cors());
+app.route('/', routes);
 
-export default app;
+serve(
+  {
+    fetch: app.fetch,
+    port: 3000,
+  },
+  info => {
+    console.log(`Server is running on http://localhost:${info.port}`);
+  },
+);
