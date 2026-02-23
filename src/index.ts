@@ -1,8 +1,11 @@
 import { Hono } from 'hono';
-import { indexRoutes } from './routes/indexRoutes.js';
+import { cors } from 'hono/cors';
+
+import { routes } from './routes/index.js';
 
 const app = new Hono();
 
-app.route('/', indexRoutes);
+app.use('*', cors());
+app.route('/', routes);
 
 export default app;
