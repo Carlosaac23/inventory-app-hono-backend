@@ -2,7 +2,7 @@
   "name": "inventory-app-hono-backend",
   "type": "module",
   "scripts": {
-    "dev": "node --watch --env-file=.env.development src/index.ts",
+    "dev": "tsx watch --env-file=.env.development src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "fmt": "oxfmt",
