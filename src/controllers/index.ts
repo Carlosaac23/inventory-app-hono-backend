@@ -1,8 +1,8 @@
 import type { Context } from 'hono';
 
-import type { Car } from '../types/index.js';
+import type { Car } from '../types/index.ts';
 
-import { getAllCars, addCar, editCar, deleteCar } from '../config/queries.js';
+import { getAllCars, addCar, editCar, deleteCar } from '../config/queries.ts';
 
 export async function getAllCarsController(c: Context) {
   try {
