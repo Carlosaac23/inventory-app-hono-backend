@@ -7,6 +7,13 @@ export async function getAllCars() {
   return rows;
 }
 
+export async function getCarById(carID: string) {
+  const { rows } = await pool.query('SELECT * FROM cars WHERE car_id = $1', [
+    carID,
+  ]);
+  return rows[0];
+}
+
 export async function addCar({
   car_model,
   car_brand,
