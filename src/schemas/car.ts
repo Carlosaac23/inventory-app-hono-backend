@@ -9,5 +9,3 @@ export const carSchema = z.object({
 });
 
 export const carIdParam = z.uuid();
-
-export type CarInput = z.infer<typeof carSchema>;
