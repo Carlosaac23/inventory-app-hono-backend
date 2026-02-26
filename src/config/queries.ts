@@ -1,17 +1,22 @@
 import type { Car } from '../types/index.js';
 
-import { pool } from './db.js';
+import { sql } from './db.js';
 
 export async function getAllCars() {
-  const { rows } = await pool.query('SELECT * FROM cars');
-  return rows;
+  try {
+    return await sql`SELECT * FROM cars`;
+  } catch (error: unknown) {
+    if (error instanceof Error) throw new Error(error.message);
+  }
 }
 
 export async function getCarById(carID: string) {
-  const { rows } = await pool.query('SELECT * FROM cars WHERE car_id = $1', [
-    carID,
-  ]);
-  return rows[0];
+  try {
+    const rows = await sql`SELECT * FROM cars WHERE car_id = ${carID}`;
+    return rows[0];
+  } catch (error) {
+    if (error instanceof Error) throw new Error(error.message);
+  }
 }
 
 export async function addCar({
@@ -21,22 +26,28 @@ export async function addCar({
   car_year,
   car_photo,
 }: Car) {
-  await pool.query(
-    'INSERT INTO cars (car_model, car_brand, car_color, car_year, car_photo) VALUES ($1, $2, $3, $4, $5)',
-    [car_model, car_brand, car_color, car_year, car_photo],
-  );
+  try {
+    await sql`INSERT INTO cars (car_model, car_brand, car_color, car_year, car_photo) VALUES (${car_model}, ${car_brand}, ${car_color}, ${car_year}, ${car_photo})`;
+  } catch (error) {
+    if (error instanceof Error) throw new Error(error.message);
+  }
 }
 
 export async function editCar(
-  car_id: string,
+  cardId: string,
   { car_model, car_brand, car_color, car_year, car_photo }: Car,
 ) {
-  await pool.query(
-    'UPDATE cars SET car_model = $1, car_brand = $2, car_color = $3, car_year = $4, car_photo = $5 WHERE car_id = $6',
-    [car_model, car_brand, car_color, car_year, car_photo, car_id],
-  );
+  try {
+    await sql`UPDATE cars SET car_model = ${car_model}, car_brand = ${car_brand}, car_color = ${car_color}, car_year = ${car_year}, car_photo = ${car_photo} WHERE car_id = ${cardId}`;
+  } catch (error) {
+    if (error instanceof Error) throw new Error(error.message);
+  }
 }
 
 export async function deleteCar(carID: string) {
-  await pool.query('DELETE FROM cars WHERE car_id = $1', [carID]);
+  try {
+    await sql`DELETE FROM cars WHERE car_id = ${carID}`;
+  } catch (error) {
+    if (error instanceof Error) throw new Error(error.message);
+  }
 }
