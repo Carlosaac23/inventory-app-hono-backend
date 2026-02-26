@@ -34,6 +34,10 @@ export async function editCarController(c: Context) {
     return c.json({ msg: 'Invalid data', errors: carID.error.issues }, 400);
   }
 
+  if (!body.success) {
+    return c.json({ smg: 'Invalid data', errors: body.error.issues }, 400);
+  }
+
   const currentCar = await getCarById(carID.data);
 
   if (!currentCar) {
