@@ -8,7 +8,11 @@ import {
   deleteCar,
 } from '../config/queries.js';
 import { NotFoundError } from '../middleware/error.js';
-import { carSchema, carIdParam } from '../schemas/car.js';
+import {
+  carFieldsSchema,
+  updateCarSchema,
+  carIdParam,
+} from '../types/index.js';
 
 export async function getAllCarsController(c: Context) {
   const allCars = await getAllCars();
@@ -16,7 +20,7 @@ export async function getAllCarsController(c: Context) {
 }
 
 export async function addCarController(c: Context) {
-  const body = carSchema.safeParse(await c.req.json());
+  const body = carFieldsSchema.safeParse(await c.req.json());
 
   if (!body.success) {
     return c.json({ msg: 'Invalid data', errors: body.error.issues }, 400);
@@ -27,26 +31,30 @@ export async function addCarController(c: Context) {
 }
 
 export async function editCarController(c: Context) {
-  const body = carSchema.safeParse(await c.req.json());
-  const carID = carIdParam.safeParse(c.req.param('id'));
-
-  if (!carID.success) {
-    return c.json({ msg: 'Invalid data', errors: carID.error.issues }, 400);
+  const carIdResult = carIdParam.safeParse(c.req.param('id'));
+  if (!carIdResult.success) {
+    return c.json(
+      { msg: 'Invalid data', errors: carIdResult.error.issues },
+      400,
+    );
   }
 
-  if (!body.success) {
-    return c.json({ smg: 'Invalid data', errors: body.error.issues }, 400);
+  const bodyResult = updateCarSchema.safeParse(await c.req.json());
+  if (!bodyResult.success) {
+    return c.json(
+      { msg: 'Invalid data', errors: bodyResult.error.issues },
+      400,
+    );
   }
 
-  const currentCar = await getCarById(carID.data);
+  const carId = carIdResult.data;
+  const currentCar = await getCarById(carId);
 
   if (!currentCar) {
     throw new NotFoundError('Car does not exist.');
   }
 
-  const updatedCar = { ...currentCar, ...body.data };
-
-  await editCar(carID.data, updatedCar);
+  await editCar(carId, bodyResult.data);
   return c.json({ msg: 'Car successfully updated.' });
 }
 
