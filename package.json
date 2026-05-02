@@ -2,11 +2,12 @@
   "name": "inventory-app-hono-backend",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch --env-file=.env.development src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "dev": "tsx watch --env-file=.env.development src/index.ts",
     "fmt": "oxfmt",
-    "lint": "oxlint"
+    "fmt:check": "oxfmt --check",
+    "lint": "oxlint",
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.9",
@@ -17,8 +18,8 @@
   "devDependencies": {
     "@types/node": "^20.11.17",
     "@types/pg": "^8.16.0",
-    "oxfmt": "^0.35.0",
-    "oxlint": "^1.50.0",
-    "typescript": "^5.8.3"
+    "oxfmt": "^0.47.0",
+    "oxlint": "^1.62.0",
+    "typescript": "^6.0.3"
   }
 }

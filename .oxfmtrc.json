@@ -3,7 +3,7 @@
   "singleQuote": true,
   "printWidth": 80,
   "arrowParens": "avoid",
-  "experimentalSortImports": {
+  "sortImports": {
     "groups": [
       "type-import",
       ["value-builtin", "value-external"],
@@ -13,5 +13,8 @@
       ["value-parent", "value-sibling", "value-index"],
       "unknown"
     ]
+  },
+  "sortPackageJson": {
+    "sortScripts": true
   }
 }
