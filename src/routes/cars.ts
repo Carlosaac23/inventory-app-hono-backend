@@ -1,25 +1,23 @@
-import type { Context } from 'hono';
+import { Hono } from 'hono';
 
 import {
+  addCar,
+  deleteCar,
+  editCar,
   getAllCars,
   getCarById,
-  addCar,
-  editCar,
-  deleteCar,
 } from '../config/queries.js';
 import { NotFoundError } from '../middleware/error.js';
 import {
   carFieldsSchema,
-  updateCarSchema,
   carIdParam,
+  updateCarSchema,
 } from '../types/index.js';
 
-export async function getAllCarsController(c: Context) {
-  const allCars = await getAllCars();
-  return c.json(allCars);
-}
+const routes = new Hono();
 
-export async function addCarController(c: Context) {
+// Add car
+routes.post('/add', async c => {
   const body = carFieldsSchema.safeParse(await c.req.json());
 
   if (!body.success) {
@@ -28,9 +26,21 @@ export async function addCarController(c: Context) {
 
   await addCar(body.data);
   return c.json({ msg: 'Car successfully added.' });
-}
+});
 
-export async function editCarController(c: Context) {
+// Get cars
+routes.get('/', async c => {
+  const cars = await getAllCars();
+
+  if (!cars) {
+    return c.json({ msg: 'Cars not found' }, 404);
+  }
+
+  return c.json(cars);
+});
+
+// Edit car
+routes.put('/:id/edit', async c => {
   const carIdResult = carIdParam.safeParse(c.req.param('id'));
   if (!carIdResult.success) {
     return c.json(
@@ -56,9 +66,10 @@ export async function editCarController(c: Context) {
 
   await editCar(carId, bodyResult.data);
   return c.json({ msg: 'Car successfully updated.' });
-}
+});
 
-export async function deleteCarController(c: Context) {
+// Delete car
+routes.delete('/:id/delete', async c => {
   const carID = carIdParam.safeParse(c.req.param('id'));
 
   if (!carID.success) {
@@ -73,4 +84,6 @@ export async function deleteCarController(c: Context) {
 
   await deleteCar(carID.data);
   return c.json({ msg: 'Car successfully deleted.' });
-}
+});
+
+export default routes;
