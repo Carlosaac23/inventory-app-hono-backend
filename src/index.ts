@@ -3,13 +3,18 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 
 import { errorHandler } from './middleware/error.js';
-import { routes } from './routes/index.js';
+import carsRoutes from './routes/cars.js';
 
 const app = new Hono();
 
-app.use('*', cors());
+app.use(
+  '*',
+  cors({
+    origin: `${process.env.FRONTEND_URL}`,
+  }),
+);
 app.use(errorHandler);
-app.route('/', routes);
+app.route('/cars', carsRoutes);
 
 serve(
   {
